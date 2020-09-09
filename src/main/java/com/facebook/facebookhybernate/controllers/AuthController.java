@@ -17,6 +17,14 @@ public class AuthController {
     @Autowired
     UserService userService;
 
+    /**
+     * Handles post request to login route, calls the login method and
+     * re-routes to the appropriate route based of the user authentication
+     * @param userSignIn
+     * @param redirectAttrs
+     * @param httpSession
+     * @return
+     */
     @PostMapping("/login")
     public String loginUsers(@ModelAttribute("userSignIn") UserSignIn userSignIn, RedirectAttributes redirectAttrs,
                              HttpSession httpSession){
@@ -29,6 +37,12 @@ public class AuthController {
         return "redirect:/";
     }
 
+    /**
+     * Handles user registration
+     * @param user
+     * @param redirectAttrs
+     * @return
+     */
     @PostMapping("/register")
     public String registerUsers(@ModelAttribute(name = "user") User user, RedirectAttributes redirectAttrs){
         ServiceResponse response = userService.userRegistration(user);

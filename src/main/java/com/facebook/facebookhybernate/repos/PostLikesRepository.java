@@ -11,6 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ *  Interface provides native JPA crude functionality by extending the
+ *  CrudRepository Interface. It also provides some custom crude query
+ *
+ */
 @Repository
 public interface PostLikesRepository extends CrudRepository<PostLike, Long> {
     @Modifying
