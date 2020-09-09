@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+ <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{style/main.css}">
+    <title>Sign In / Sign Up</title>
+
+</head>
+
+<body>
+<main class="login">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7 left-side">
+                <h1 class="display-3 fbblue-color">
+                    facebook
+                </h1>
+                <div class="text-left">
+                    Facebook helps you connect and share <br> with the people in your life.
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div th:if="${response != null && !response.isStatus() }" class="alert alert-danger text-center"
+                th:text="${response.getMessage()}">
+                </div>
+
+                <div th:if="${response != null && response.isStatus() }" class="alert alert-success text-center"
+                     th:text="${response.getMessage()}">
+                </div>
+                <form action="#" th:action="@{/login}" method="POST" th:object="${userSignIn}">
+                    <div class="form-group">
+                        <input required type="email" placeholder="Email address or phone number"
+                             name="email"  th:field="*{email}"     class="form-control form-control-lg" id="login-email" aria-describedby="emailHelp">
+                    </div>
+                    <div class="form-group">
+                        <input required placeholder="Password" type="password" class="form-control form-control-lg"
+                           name="password"    th:field="*{password}"  id="login-password">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary fbblue-bg btn-lg btn-block">Log In</button>
+                    <div class="form-group">
+                        <div class="text-center pt-2"><a href="">forgoten account ?</a> </div>
+                    </div>
+                    <hr>
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success btn-lg btn-block" data-toggle="modal"
+                            data-target="#staticBackdrop">
+                        Create New Account
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!--Registration Modal -->
+<div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel">Sign Up</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form  action="#" th:action="@{/register}" method="POST" th:object="${user}" class="modal-body">
+                <div class="row">
+                    <div class="col-6 form-group">
+                        <input th:field="*{firstname}" name="firstname" type="text" class="form-control" placeholder="First name">
+                    </div>
+                    <div class="col-6 form-group">
+                        <input th:field="*{lastname}" name="lastname" type="text" class="form-control" placeholder="Last name">
+                    </div>
+                    <div class="col-6 form-group">
+                        <input th:field="*{email}" name="email" type="email" class="form-control" placeholder="Email address">
+                    </div>
+                    <div class="col-6 form-group">
+                        <input th:field="*{mobile}" name="mobile" type="tel" class="form-control" placeholder="Mobile number">
+                    </div>
+                    <div class="col-12 form-group">
+                        <input th:field="*{password}" name="password" type="password" class="form-control" placeholder="New password"
+                               aria-describedby="passwordHelpBlock">
+                        <small id="passwordHelpBlock" class="form-text text-muted">
+                            Your password must be 8-20 characters long, contain letters and numbers, and must not
+                            contain spaces, special characters, or emoji.
+                        </small>
+                    </div>
+                    <div class="col-12 form-group">
+                        <label style="font-size: 0.8rem;" class="text-muted" for="reg-date-birth">Date of
+                            Birth</label>
+                        <input th:field="*{birthdate}" name="birthdate" type="date" id="reg-date-birth" class="form-control">
+                    </div>
+
+                    <div class="col-12">
+                        <label style="font-size: 0.8rem;" class="text-muted" for="reg-date-birth">Gender</label>
+                    </div>
+                    <div class="col-4 form-group mr-2 custom-radio">
+                        <label class="radio-label text-muted" for="genderMale">Male</label>
+                        <input type="radio" value="Male" id="genderMale" th:field="*{sex}" name="sex" class="radio-button">
+                    </div>
+                    <div class="col-4 form-group custom-radio">
+                        <label class="radio-label text-muted" for="genderFemale">Female</label>
+                        <input type="radio" value="Female" id="genderFemale" th:field="*{sex}" name="sex" class="radio-button">
+                    </div>
+
+                </div>
+                <small class="form-text text-muted">
+                    By clicking Sign Up, you agree to our Terms, Data Policy and Cookie Policy. You may receive SMS
+                    notifications from us and can opt out at any time.
+                </small>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-block">Sign Up</button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<footer>
+
+</footer>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
