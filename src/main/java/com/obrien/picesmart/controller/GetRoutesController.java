@@ -112,4 +112,13 @@ public class GetRoutesController {
         model.addAttribute("review", new ReviewDTO());
         return "view";
     }
+
+    @GetMapping(path = "/products")
+    public String getProductsPage(Model model){
+        List<ProductDTO> products =  productService.getProducts(0, size);
+        model.addAttribute("products", products);
+        model.addAttribute("search", new SearchDTO());
+        return "product-search";
+    }
+
 }

@@ -15,14 +15,14 @@ import java.util.List;
  */
 public interface ProductRepository extends PagingAndSortingRepository<Product, Long> {
 
-    @Modifying
+
     @Query(value = "select * from products where brand_id =:brandId " +
             "order by timestamp desc limit :offset, :limit", nativeQuery = true)
     @Transactional
     public List<Product> findProductsByBrandId(@Param("brandId") long brandId,
                                        @Param("limit") int limit, @Param("offset") int offset );
 
-    @Modifying
+
     @Query(value = "SELECT products.id AS id, products.description AS description,  " +
             "products.image_url AS imageUrl,  products.price AS price,   " +
             "products.category AS category, products.catch_phrase AS catchPhrase,  " +
@@ -30,12 +30,12 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, L
             "AS averageRating, count(review.id) AS totalReviews,  brands.id AS brandId," +
             " brands.brand_name AS brandName, products.name AS name    FROM products LEFT JOIN review " +
             "ON products.id = review.product_id  INNER JOIN brands ON  " +
-            "products.brand_id = brands.id WHERE brands.id =:brandId  GROUP BY products.id  " +
+            "products.brand_id = brands.id WHERE brands.id =:brandId  GROUP BY products.id, products.description " +
             "ORDER BY products.timestamp DESC LIMIT :offset, :limit ;", nativeQuery = true)
     @Transactional
     public List<Object[]> findProductsByBrand(@Param("brandId") long brandId, @Param("limit") int limit, @Param("offset") int offset );
 
-    @Modifying
+
     @Query(value = "SELECT products.id AS id, products.description AS description,  " +
             "            products.image_url AS imageUrl,  products.price AS price,  " +
             "            products.category AS category, products.catch_phrase AS catchPhrase, " +
@@ -43,13 +43,13 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, L
             "            AS averageRating, count(review.id) AS totalReviews,  brands.id AS brandId, " +
             "             brands.brand_name AS brandName, products.name AS name    FROM products LEFT JOIN review " +
             "            ON products.id = review.product_id  INNER JOIN brands ON  " +
-            "            products.brand_id = brands.id  GROUP BY products.id  " +
+            "            products.brand_id = brands.id  GROUP BY products.id , products.description " +
             "            ORDER BY products.timestamp DESC LIMIT :offset, :limit ;", nativeQuery = true)
     @Transactional
     public List<Object[]> findProducts(@Param("limit") int limit, @Param("offset") int offset );
 
 
-    @Modifying
+
     @Query(value = "SELECT products.id AS id, products.description AS description,  " +
             "            products.image_url AS imageUrl,  products.price AS price,  " +
             "            products.category AS category, products.catch_phrase AS catchPhrase,  " +
@@ -61,4 +61,25 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, L
             "            ", nativeQuery = true)
     @Transactional
     public List<Object[]> findProduct(@Param("productId") long productId);
+
+    @Query(value = "SELECT products.id AS id, products.description AS description,  " +
+            "            products.image_url AS imageUrl,  products.price AS price,  " +
+            "            products.category AS category, products.catch_phrase AS catchPhrase, " +
+            "            IFNULL(CAST(AVG(review.rating) as DECIMAL(10, 1)), 0.0)  " +
+            "            AS averageRating, count(review.id) AS totalReviews,  brands.id AS brandId, " +
+            "             brands.brand_name AS brandName, products.name AS name    FROM products LEFT JOIN review " +
+            "            ON products.id = review.product_id  INNER JOIN brands ON  " +
+            "            products.brand_id = brands.id " +
+            "            WHERE products.name LIKE '%{:searchQuery}%' " +
+            "            GROUP BY products.id , products.description " +
+            "            ORDER BY CASE WHEN :price = 'asc'  THEN price ASC, " +
+            "                     CASE WHEN :price = 'desc'  THEN price DESC, " +
+                    "             CASE WHEN :rating = 'asc'  THEN rating ASC, " +
+            "                     CASE WHEN :rating = 'desc'  THEN rating DESC" +
+            "            LIMIT :offset, :limit ;", nativeQuery = true)
+    @Transactional
+    public List<Object[]> findProductsSortByPriceAndRating(@Param("searchQuery") String searchQuery,
+                                                           @Param("price") String price, @Param("rating") String rating,
+                                                           @Param("limit") int limit, @Param("offset") int offset );
+
 }

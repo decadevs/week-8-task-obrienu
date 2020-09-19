@@ -17,7 +17,7 @@
 <header>
     <nav class="navbar navbar-fixed navbar-expand-lg navbar-light bg-grey my-home-container">
 
-        <a class="nav-link" href="/"><img id="home-logo" src="./assets/images/logo.jpg" alt=""></a>
+        <a class="nav-link" href="/"><img id="home-logo" th:src="@{./assets/images/logo.jpg}" alt=""></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -33,7 +33,7 @@
                     <a class="nav-link" href="/about">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Product</a>
+                    <a class="nav-link" href="/products">Product</a>
                 </li>
                 <li th:if="${session.user == null && session.brand == null}" class="nav-item">
                     <a class="nav-link" href="/auth">Sign In</a>
@@ -113,9 +113,9 @@
         <section class="products-container">
 
             <main class="my-row">
-                <div class="my-column">
+                <div th:each="product : ${products}"  class="my-column">
 
-                    <div th:each="product : ${products}" class="card">
+                    <div class="card">
                         <img class="card-top" th:src="${product.getImageUrl()}" alt="">
 
                         <div class="card-body">

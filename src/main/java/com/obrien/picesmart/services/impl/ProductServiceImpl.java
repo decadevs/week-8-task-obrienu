@@ -6,6 +6,7 @@ import com.obrien.picesmart.repository.ProductRepository;
 import com.obrien.picesmart.services.BrandService;
 import com.obrien.picesmart.services.ProductService;
 import com.obrien.picesmart.utils.DTO.ProductDTO;
+import com.obrien.picesmart.utils.DTO.SearchDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,6 @@ import java.math.BigInteger;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,28 +39,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getProductDTO(long id) {
         List<Object[]> products = productRepository.findProduct(id);
-        Object[] product = products.get(0);
-        if (product == null) {
+        List<ProductDTO> productDTOS = convertObjectArrayToProductDTO(products);
+        if(productDTOS.size() == 0){
             return null;
         }
-        ProductDTO productDTO;
-        Brand brand;
-        productDTO = new ProductDTO();
-        brand = new Brand();
+        return productDTOS.get(0);
+    }
 
-        productDTO.setId(convertNum((BigInteger) product[0]));
-        productDTO.setDescription(converClob(product[1]));
-        productDTO.setImageUrl((String) product[2]);
-        productDTO.setPrice((int) product[3]);
-        productDTO.setCategory((String) product[4]);
-        productDTO.setCatchPhrase((String) product[5]);
-        productDTO.setAvgRating(convertNum((BigDecimal) product[6]));
-        productDTO.setTotalReviews(convertNum((BigInteger) product[7]));
-        brand.setId(convertNum((BigInteger) product[8]));
-        brand.setBrandName((String) product[9]);
-        productDTO.setName((String) product[10]);
-        productDTO.setBrand(brand);
-        return productDTO;
+    @Override
+    public List<ProductDTO> getSearchAndSortedProducts(SearchDTO search, int size, int page) {
+        int offset = size * page;
+        List<Object[]> object = productRepository.findProductsSortByPriceAndRating(search.getQuery(),search.getPrice(),search.getRating(),size,offset);
+        return convertObjectArrayToProductDTO(object);
     }
 
 
@@ -105,60 +95,15 @@ public class ProductServiceImpl implements ProductService {
      */
     public List<ProductDTO> getProducts(int page, int size) {
         int offset = size * page;
-        List<ProductDTO> products = new ArrayList<>();
-        System.out.println("OFFSET =" + offset + " LIMIT = " + size);
         List<Object[]> listOfProducts = productRepository.findProducts(size, offset);
-        ProductDTO productDTO;
-        Brand brand;
-        for (Object[] product : listOfProducts) {
-            productDTO = new ProductDTO();
-            brand = new Brand();
-            productDTO.setId(convertNum((BigInteger) product[0]));
-            productDTO.setDescription(converClob(product[1]));
-            productDTO.setImageUrl((String) product[2]);
-            productDTO.setPrice((int) product[3]);
-            productDTO.setCategory((String) product[4]);
-            productDTO.setCatchPhrase((String) product[5]);
-            productDTO.setAvgRating(convertNum((BigDecimal) product[6]));
-            productDTO.setTotalReviews(convertNum((BigInteger) product[7]));
-            brand.setId(convertNum((BigInteger) product[8]));
-            brand.setBrandName((String) product[9]);
-            productDTO.setName((String) product[10]);
-
-            productDTO.setBrand(brand);
-
-            products.add(productDTO);
-        }
-        return products;
+        return convertObjectArrayToProductDTO(listOfProducts);
     }
 
     @Override
     public List<ProductDTO> getBrandProducts(long brandId, int page, int size) {
         int offset = size * page;
-        List<ProductDTO> products = new ArrayList<>();
         List<Object[]> listOfProducts = productRepository.findProductsByBrand(brandId, size, offset);
-        ProductDTO productDTO;
-        Brand brand;
-        for (Object[] product : listOfProducts) {
-            productDTO = new ProductDTO();
-            brand = new Brand();
-            productDTO.setId(convertNum((BigInteger) product[0]));
-            productDTO.setDescription(converClob(product[1]));
-            productDTO.setImageUrl((String) product[2]);
-            productDTO.setPrice((int) product[3]);
-            productDTO.setCategory((String) product[4]);
-            productDTO.setCatchPhrase((String) product[5]);
-            productDTO.setAvgRating(convertNum((BigDecimal) product[6]));
-            productDTO.setTotalReviews(convertNum((BigInteger) product[7]));
-            brand.setId(convertNum((BigInteger) product[8]));
-            brand.setBrandName((String) product[9]);
-            productDTO.setName((String) product[10]);
-
-            productDTO.setBrand(brand);
-
-            products.add(productDTO);
-        }
-        return products;
+        return convertObjectArrayToProductDTO(listOfProducts);
     }
 
     @Override
@@ -186,6 +131,32 @@ public class ProductServiceImpl implements ProductService {
 
     private Integer convertNum(BigInteger num) {
         return num.intValue();
+    }
+
+    private List<ProductDTO> convertObjectArrayToProductDTO(List<Object[]> objects){
+        List<ProductDTO> products = new ArrayList<>();
+        ProductDTO productDTO;
+        Brand brand;
+        for (Object[] product : objects) {
+            productDTO = new ProductDTO();
+            brand = new Brand();
+            productDTO.setId(convertNum((BigInteger) product[0]));
+            productDTO.setDescription(converClob(product[1]));
+            productDTO.setImageUrl((String) product[2]);
+            productDTO.setPrice((int) product[3]);
+            productDTO.setCategory((String) product[4]);
+            productDTO.setCatchPhrase((String) product[5]);
+            productDTO.setAvgRating(convertNum((BigDecimal) product[6]));
+            productDTO.setTotalReviews(convertNum((BigInteger) product[7]));
+            brand.setId(convertNum((BigInteger) product[8]));
+            brand.setBrandName((String) product[9]);
+            productDTO.setName((String) product[10]);
+
+            productDTO.setBrand(brand);
+
+            products.add(productDTO);
+        }
+        return products;
     }
 
 }

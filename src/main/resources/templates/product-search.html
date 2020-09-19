@@ -9,8 +9,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="./assets/style/main.css">
-    <title>Hello, world!</title>
+    <link rel="stylesheet" th:href="@{/assets/style/main.css}">
+    <title>Search Products</title>
 </head>
 
 <body>
@@ -27,13 +27,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/about">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/products">Product</a>
+                    <a class="nav-link" href="/products">Product  <span class="sr-only">(current)</span></a>
                 </li>
                 <li th:if="${session.user == null && session.brand == null}" class="nav-item">
                     <a class="nav-link" href="/auth">Sign In</a>
@@ -58,22 +58,34 @@
 </header>
 <main id="home" class="my-home-container">
     <!-- ---------SECTION 1 MAIN  -->
-    <div class="home-bg">
-        <div class="col-12 col-md-6 home-bg-right">
+    <section class="search-bar mt-3 p-3">
+        <form th:object="${search}" th:action="@{'/products/1'}" method="post" class="form-inline">
+            <div class=" my-2 my-lg-0 mr-auto">
+                <input th:field="*{query}" class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn my-btn my-2 my-sm-0" type="submit">Search</button>
+            </div>
 
-        </div>
-        <div class="col-12 wavy-section">
+            <div class="custom-control custom-radio custom-control-inline ">
+                <input th:field="*{price}" th:checked="${search.getPrice() == 'asc'}" value="asc" type="radio" id="price-asc" name="price" class="custom-control-input">
+                <label class="custom-control-label" for="price-asc">Asc Price</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input th:field="*{price}" th:checked="${search.getPrice() == 'desc'}" value="desc" type="radio" id="price-desc" name="price" class="custom-control-input">
+                <label class="custom-control-label" for="price-desc">Desc Price</label>
+            </div>
 
-        </div>
-        <div class="bg-text">
+            <div class="custom-control custom-radio custom-control-inline ">
+                <input th:field="*{rating}" th:checked="${search.getRating() == 'asc'}" value="asc"  type="radio" id="rating-asc" name="rating" class="custom-control-input">
+                <label class="custom-control-label" for="rating-asc">Asc Rating</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input th:field="*{rating}" th:checked="${search.getPrice() == 'desc'}" value="desc" type="radio" id="rating-desc" name="rating" class="custom-control-input">
+                <label  class="custom-control-label" for="rating-desc">Desc Rating</label>
+            </div>
+        </form>
+    </section>
 
-        </div>
-    </div>
     <section class="new-arrival-section">
-
-        <header class="section-headers section1-headers">
-            New Arrival
-        </header>
         <main class="my-row">
             <div  th:each="product : ${products}" class="my-column">
 
@@ -129,13 +141,9 @@
 
 
 
-
         </main>
     </section>
 </main>
-<footer>
-    Pisces Mart
-</footer>
 <footer>
     Pisces Mart
 </footer>

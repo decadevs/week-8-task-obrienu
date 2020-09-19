@@ -2,6 +2,7 @@ package com.obrien.picesmart.services;
 
 import com.obrien.picesmart.model.Product;
 import com.obrien.picesmart.utils.DTO.ProductDTO;
+import com.obrien.picesmart.utils.DTO.SearchDTO;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface ProductService {
     public List<ProductDTO> getProducts(int pageNumber, int size);
     public List<ProductDTO> getBrandProducts(long brandId, int pageNumber, int size);
     public ProductDTO getProductDTO(long id);
+    public List<ProductDTO> getSearchAndSortedProducts(SearchDTO search, int size, int page);
+
 }

@@ -379,4 +379,12 @@ img.card-top {
 .my-modals.modal-content {
   background-color: #ffffffad !important;
 }
+
+.search-bar {
+  background-color: transparent;
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  color: #212020;
+}
 /*# sourceMappingURL=main.css.map */
