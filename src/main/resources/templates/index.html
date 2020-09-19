@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/style/main.css">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+<header>
+    <nav class="navbar navbar-fixed navbar-expand-lg navbar-light bg-grey my-home-container">
+
+        <a class="nav-link" href="/"><img id="home-logo" src="./assets/images/logo.jpg" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Product</a>
+                </li>
+                <li th:if="${session.user == null && session.brand == null}" class="nav-item">
+                    <a class="nav-link" href="/auth">Sign In</a>
+                </li>
+
+                <li th:if="${ session.brand != null}" class="nav-item">
+                    <a class="nav-link" th:href="@{'/brand/' + ${session.brand.getId()} + '/1'}"  >Dashboard</a>
+                </li>
+                <li th:if="${session.user != null}" class="nav-item" >
+                    <a class="nav-link" href="#">Welcome <span th:text="${session.user.getFirstName()}"></span></a>
+                </li>
+                <li th:if="${session.brand != null}" class="nav-item" >
+                    <a class="nav-link" href="#">Welcome <span th:text="${session.brand.getBrandName()}"></span></a>
+                </li>
+                <li th:if="${session.user != null || session.brand != null}" class="nav-item">
+                    <a class="nav-link" href="/logout">Sign Out</a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+</header>
+<main id="home" class="my-home-container">
+    <!-- ---------SECTION 1 MAIN  -->
+    <div class="home-bg">
+        <div class="col-12 col-md-6 home-bg-right">
+
+        </div>
+        <div class="col-12 wavy-section">
+
+        </div>
+        <div class="bg-text">
+
+        </div>
+    </div>
+    <section class="new-arrival-section">
+
+        <header class="section-headers section1-headers">
+            New Arrival
+        </header>
+        <main class="my-row">
+            <div class="my-column">
+
+                <div th:each="product : ${products}" class="card">
+                    <img class="card-top" th:src="${product.getImageUrl()}" alt="">
+
+                    <div class="card-body">
+                        <h3 class="product-name" th:text="${product.getName()}">
+
+                        </h3>
+                        <div  class="row">
+                            <div class="col-6">
+                                <p class="text-center">
+                                    <span th:if="${product.getAvgRating() > 4.7 }"  class="goldstar"><img th:src="@{/assets/icon/star-fill.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() < 4.7 &&  product.getAvgRating() > 4.3}"  class="goldstar"><img th:src="@{/assets/icon/star-half.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() < 4.3}"  class="goldstar"><img th:src="@{/assets/icon/star.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() > 3.7 }"  class="goldstar"><img th:src="@{/assets/icon/star-fill.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() < 3.7 &&  product.getAvgRating() > 3.3}"  class="goldstar"><img th:src="@{/assets/icon/star-half.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() < 3.3}"  class="goldstar"><img th:src="@{/assets/icon/star.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() > 2.7 }"  class="goldstar"><img th:src="@{/assets/icon/star-fill.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() < 2.7 &&  product.getAvgRating() > 2.3}"  class="goldstar"><img th:src="@{/assets/icon/star-half.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() < 2.3}"  class="goldstar"><img th:src="@{/assets/icon/star.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() > 1.7 }"  class="goldstar"><img th:src="@{/assets/icon/star-fill.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() < 1.7 &&  product.getAvgRating() > 1.3}"  class="goldstar"><img th:src="@{/assets/icon/star-half.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() < 1.3}"  class="goldstar"><img th:src="@{/assets/icon/star.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() > 0.7 }"  class="goldstar"><img th:src="@{/assets/icon/star-fill.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() < 0.7 &&  product.getAvgRating() > 0.3}"  class="goldstar"><img th:src="@{/assets/icon/star-half.svg}" alt=""></span>
+                                    <span th:if="${product.getAvgRating() < 0.3}"  class="goldstar"><img th:src="@{/assets/icon/star.svg}" alt=""></span>
+                                </p>
+                            </div>
+                            <div class="col-6 ml-auto" > <span th:text="${product.getTotalReviews()}"></span> Reviews</div>
+                        </div>
+                        <p class="product-description">
+                            <span  th:text="${product.getDescription().substring(0, product.getDescription().length() > 100 ? 100 : product.getDescription().length())}"></span>
+                            <a th:href="@{'/product/view/' + ${product.getId()} + '/1'}">Read More....</a>
+                        </p>
+                        <p>Category: <span th:text="${product.getCategory()}"></span></p>
+
+
+                        <div class="row">
+                            <p class="col-6" ># <span th:text="${product.getPrice()}"></span> </p>
+
+                            <div class="col-6 ml-auto">
+                                <a th:href="@{'/product/view/' + ${product.getId()}  + '/1'}" class="btn btn-block my-btn">View</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div  class="card-footer text-center">
+                        <a th:href="@{'/brand/' + ${product.getBrand().getId()} + '/1'}" th:text="${product.getBrand().getBrandName()}"></a>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </main>
+    </section>
+</main>
+<footer>
+    Pisces Mart
+</footer>
+<footer>
+    Pisces Mart
+</footer>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+$deca-green : #55c57a;
+$dec-green-light: #7ed56f;
+$dec-green-dark: #28b485;
+$bg-grey-light1: #f7f7f7;
+$bg-grey-light2: #eee;
+
+
+@mixin mediaMd {
+    @media screen and (min-width: 501px) {
+      @content;
+    }
+  }
+  @mixin mediaLg {
+    @media screen and (min-width: 770px) {
+      @content;
+    }
+  }
+  @mixin mediaXl {
+    @media screen and (min-width: 1171px) {
+      @content;
+    }
+  }

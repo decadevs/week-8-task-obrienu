@@ -1,0 +1,337 @@
+@import "./config";
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    background: rgb(177,175,177);
+    background: linear-gradient(90deg, rgba(177,175,177,1) 0%, rgba(241,237,237,1) 33%, rgba(241,237,237,1) 100%);}
+
+    header{
+        margin:0;
+        padding: 0;
+    }
+   
+    nav{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+    .links{
+        padding: 1.5rem 0;
+        
+    }
+
+
+    
+    a.link{
+        transition: all linear 300ms;
+        color: #212020;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+
+
+    .active-link{
+        border-bottom: 3px rgba(177,175,177,1) dashed;
+        background-color:#212020;
+    }
+
+    .active-link a{
+        color: #ffffff;
+        padding: 0 0.8rem;
+    }
+
+    a:hover{
+       text-decoration: none;
+       color: #747070;
+    }
+
+    #product{
+        min-height: calc(100vh - 6rem);
+    }
+    
+    hr {
+        margin: 1rem auto;
+        width: 100%;
+        border: 0;
+        height: 3px;
+        background-image: linear-gradient(to right,  rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.75));
+    }
+
+
+    .product-view-left, .product-view-right{
+        @include mediaLg{
+            height: 40rem;
+        }
+    }
+
+  .brand-image{
+      max-width: 20rem;
+      height: auto;
+
+      @include mediaLg{
+        max-width: 30rem;
+        width: 100%;
+      }
+  }
+
+
+
+  .product-view-left {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 5rem;
+      @include mediaLg{
+          padding: 1rem;
+      }
+    
+  }
+
+  .product-view-right{
+      padding-top: 5rem;
+      display: flex;
+      flex-flow: column nowrap;
+      align-items: center;
+      justify-content: center;
+      @include mediaLg{
+        padding: 1rem;
+    }
+  }
+
+.product-rating{
+    font-size: 1.5rem;
+}
+
+.user-rating-date{
+    font-size: 0.8rem;
+    text-align: right;
+    padding-right: 2rem;
+
+}
+
+.user-rating{
+    padding-right: 2rem;
+    font-size: 0.8rem;
+}
+
+.user-name{
+    font-size: 0.9rem;
+    color: #212020d0;
+}
+
+.reviews, .about-product, .product-preview{
+  @include mediaMd{
+      width: 80%;
+      margin: auto;
+  } 
+  @include mediaLg{
+    width: 60%;
+  }
+}
+
+.review, .add-product-form{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    margin: 2rem auto;
+    border-radius: 20px;
+}
+
+
+.bg-grey{
+    background-color:$bg-grey-light1;
+}
+
+
+#home-logo{
+    height: 2rem;
+    width: auto;
+}
+
+
+.home-bg{
+    background-color: $dec-green-dark;
+    height: 80vh;
+    width: 100%;
+    position: relative;
+    background-image: linear-gradient(125deg, rgba(4,4,4,0.8561799719887955) 0%, rgba(53,64,60,0.7077205882352942) 7%, rgba(98,143,203,0.6180847338935574) 59%, rgba(104,142,205,0.6825105042016807) 81%, rgba(6,6,6,0.788953081232493) 100%), url(../images/chair1.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position-y: 40%;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+
+
+    .wavy-section{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 143px;
+        width: 100%;
+        background-image: url(../images/wave.png);
+    }
+
+    .bg-text{
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 4rem;
+        color: #ffffff;
+        position: relative;
+        top: 20rem;
+        left: 9rem;
+        display: inline-block;
+    }
+
+}
+
+.my-home-container{
+    width: 95%;
+    margin: auto;
+}
+
+
+section.new-arrival-section, .products-container, .brand-header{
+    background-color: transparent;
+    border-radius: 20px;
+    margin-top: 3rem;
+    padding: 2rem;
+    padding-bottom: 2rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+
+    header.section-headers{
+        text-align: center;
+        padding: 1rem 0;
+        position: relative;
+        margin-bottom: 2rem;
+        font-size: 1.5rem;
+
+        &::before{
+        content: "New";
+        position: absolute;
+        font-size: 4rem;
+        top: -1rem;
+        left: 0;
+        text-align: center;
+        opacity: 0.1;
+        z-index: 0;
+        text-align: center;
+        width: 100%;
+        }
+    }
+}
+
+.card-container{
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(1, 1fr);
+    @include mediaMd{
+      
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @include mediaLg{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include mediaXl{
+        grid-template-columns: repeat(3, 1fr);
+    }
+   
+}
+
+footer{
+    height: 3rem;
+    text-align: center;
+    line-height: 3rem;
+}
+
+.dashboard{
+    background-color: #ffffff;
+}
+
+/* Float four columns side by side */
+.my-column {
+    float: left;
+    width: 100%;
+    padding: 0 10px;
+    margin-bottom: 20px;
+
+    @include mediaMd{
+        width: 50%;
+    }
+    @include mediaLg{
+        width: 30%;
+    }
+
+    @include mediaXl{
+        width: 25%;
+    }
+  }
+  
+  /* Remove extra left and right margins, due to padding */
+  .my-row {margin: 0 -5px;}
+  
+  /* Clear floats after the columns */
+  .my-row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+
+  card{
+    margin-top: 2rem;
+    width: 100%;
+    padding: 1rem;
+    box-shadow: 4px 4px 4px rgba(53, 64, 60, 0.427);
+    
+}
+
+img.card-top{
+    width: 100%;
+    height: auto;
+}
+
+// display: block;
+// margin-bottom: 20px;
+  
+
+.my-container{
+
+    width: 100%;
+    margin: auto;
+    @include mediaMd{
+        width: 90%;
+    }
+}
+
+
+//OVER RIDE ACTIVE BUTTON
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link, .my-btn{
+    background-color: transparent;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    color: #212020;
+    transition: all 300ms ease-in;
+}
+
+.my-btn{
+    border: none;
+}
+
+.my-btn:hover{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.616);
+    background-color: rgba(0, 0, 0, 0.397);
+    color: #ffffff;
+}
+
+
+.add-product{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.my-modals.modal-content{
+    background-color: #ffffffad !important;
+}

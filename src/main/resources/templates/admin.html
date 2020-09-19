@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/assets/style/main.css}">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+<header>
+    <nav class="navbar navbar-fixed navbar-expand-lg navbar-light bg-grey my-home-container">
+
+        <a class="nav-link" href="/"><img id="home-logo" th:src="@{/assets/images/logo.jpg}" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Product</a>
+                </li>
+                <li th:if="${session.user == null && session.brand == null}" class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#signInModal">Sign In</a>
+                </li>
+                <li th:if="${session.user == null && session.brand == null}" class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#signUpModal">Sign Up</a>
+                </li>
+                <li th:if="${ session.brand != null}" class="nav-item">
+                    <a class="nav-link" th:href="@{'/brand/' + ${session.brand.getId()} + '/1'}"  >Dashboard <span class="sr-only">(current)</span></a>
+                </li>
+                <li th:if="${session.user != null}" class="nav-item" >
+                    <a class="nav-link" href="#">Welcome <span th:text="${session.user.getFirstName()}"></span></a>
+                </li>
+                <li th:if="${session.brand != null}" class="nav-item" >
+                    <a class="nav-link" href="#">Welcome <span th:text="${session.brand.getBrandName()}"></span></a>
+                </li>
+                <li th:if="${session.user != null || session.brand != null}" class="nav-item">
+                    <a class="nav-link" href="/logout">Sign Out</a>
+                </li>
+            </ul>
+        </div>
+
+
+    </nav>
+</header>
+<div class="row p-5 dashboard">
+    <div class="col-4">
+        <div class="list-group" id="list-tab" role="tablist">
+            <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list"
+               href="#list-home" role="tab" aria-controls="home">Info</a>
+
+            <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list"
+               href="#list-messages" role="tab" aria-controls="messages">About</a>
+            <a th:if="${session.brand != null && session.brand.getId() == brand.getId()}" class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list"
+               href="#list-settings" role="tab" aria-controls="settings">Action</a>
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active text-center" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                <span class="display-4"  th:if="${brand != null}" th:text="${brand.getBrandName()}"> </span>
+                <p>Mobile: <span  th:if="${brand != null}" th:text="${brand.getMobile()}"></span></p>
+                <p>Email: <span  th:if="${brand != null}" th:text="${brand.getEmail()}"></span></p>
+                <p>Address: <span  th:if="${brand != null}" th:text="${brand.getAddress()}"> </span></p>
+            </div>
+
+            <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
+                <h4>About</h4>
+                <hr>
+                <span  th:if="${brand != null}" th:text="${brand.getAbout()}"> </span>
+            </div>
+            <div th:if="${session.brand != null && session.brand.getId() == brand.getId()}" class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">
+                <button class="btn btn-primary btn-block"  data-toggle="modal"
+                        data-target="#addProduct">
+                    Add New Product
+                </button>
+                <button class="btn btn-primary btn-block mt-2 btn-edit"  data-toggle="modal"
+                        data-target="#editBrand">Edit Brand Details</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-12">
+
+    <main id="product" class="my-home-container col-12">
+
+        <section class="product-section">
+
+            <main class="card-container">
+                <div th:each="product : ${products}" class="card">
+                    <img class="card-top" th:src="${product.getImageUrl()}" alt="" srcset="">
+                    <div class="card-body">
+                        <h3 class="product-name" th:id="'product-name' + ${product.getId()}" th:text="${product.getName()}">
+                            Price Water
+                        </h3>
+                        <p class="product-description" th:id="'description' + ${product.getId()}" th:text="${product.getDescription()}">
+
+                        </p>
+                        <a th:href="@{'/product/view/' + ${product.getId()}}" class="btn btn-primary">
+                            View
+                        </a>
+                    </div>
+                    <div th:if="${session.brand != null && session.brand.getId() == brand.getId()}" class="card-footer">
+                        <form th:action="@{'/product/delete/' + ${product.getId()} + '/' + ${brand.getId()} }" method="POST">
+                            <button type="submit" class="btn btn-danger btn-block">Delete</button>
+                        </form>
+                        <button class="btn btn-primary btn-block mt-2 btn-edit" th:data-image="${product.getImageUrl()}"
+                                th:data-id="${product.getId()}" data-toggle="modal" th:data-brand="${brand.getId()}"
+                                data-target="#editProduct">Edit</button>
+                    </div>
+                </div>
+
+            </main>
+        </section>
+        <nav aria-label="..." class="mt-4 ml-auto">
+            <ul class="pagination">
+                <li class="page-item disabled">
+                    <a class="page-link" href="" tabindex="-1" aria-disabled="true">&laquo; Previous</a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" href="">Next &raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    </main>
+
+</div>
+
+<footer>
+    Pisces Mart
+</footer>
+
+<!-- ADD PRODUCT MODAL  -->
+
+<div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="addProductLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Product/Service</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:object="${addProduct}"  method="POST" th:action="@{'/product/add/' + ${brand.getId()} }">
+                    <div class="form-group">
+                        <label for="product-name" class="col-form-label">Product Name:</label>
+                        <input th:field="*{name}" type="text" class="form-control" id="product-name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="catch-phrase" class="col-form-label">Catch Phrase:</label>
+                        <input th:field="*{catchPhrase}" type="text" class="form-control" id="catch-phrase" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image-url" class="col-form-label">Price:</label>
+                        <input th:field="*{price}" type="number" class="form-control" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image-url" class="col-form-label">ImageUrl:</label>
+                        <input th:field="*{imageUrl}" type="text" class="form-control" id="image-url">
+                    </div>
+
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Category</label>
+                        </div>
+                        <select th:field="*{category}" class="custom-select" id="inputGroupSelect01">
+                            <option selected value="Furniture">Furniture</option>
+                            <option value="Art">Art</option>
+                            <option value="Flooring">Flooring</option>
+                            <option value="Bathroom">Bathroom</option>
+                            <option value="Kitchen">Kitchen</option>
+                            <option value="Ceiling">Ceiling</option>
+                            <option value="Lighting">Lighting</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Product Description:</label>
+                        <textarea th:field="*{description}" minlength="20" maxlength="500" class="form-control" id="message-text">
+                          </textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Product/Service</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- EDIT PRODUCT MODAL  -->
+
+<div class="modal fade" id="editProduct" tabindex="-1" aria-labelledby="editProductLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductLabel">Edit Product/Service</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:object="${editProduct}" id="edit-form" method="POST" th:action="@{'/product/edit/'}">
+                    <div class="form-group">
+                        <label for="product-name" class="col-form-label">Product Name:</label>
+                        <input th:field="*{name}" type="text" class="form-control" id="edit-product-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="image-url" class="col-form-label">ImageUrl:</label>
+                        <input th:field="*{imageUrl}" type="text" class="form-control" id="edit-image-url">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Product Description:</label>
+                        <textarea th:field="*{description}" minlength="20" maxlength="255" class="form-control" id="edit-message-text">
+                          </textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Product/Service</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- EDIT BRAND BIO -->
+
+<div class="modal fade" id="editBrand" tabindex="-1" aria-labelledby="editBrandLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editBrandLabel">Brand Bio</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:object="${editBrand}" id="edit-brand" method="POST" th:action="@{'/brand/edit/' + ${brand.getId()}}">
+                    <div class="form-group">
+                        <input type="text" aria-required="true" required name="company_name"
+                               th:field="*{brandName}"    placeholder="Company Name" class="form-control" >
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <input th:field="*{email}" required aria-required="true" name="email" type="email" placeholder="Email"
+                                       class="form-control" th:value="${brand.getEmail()}">
+                        </div>
+                        <div class="form-group col-6">
+                            <input th:field="*{mobile}" required aria-required="true" name="mobile" type="tel" placeholder="Mobile"
+                                     class="form-control" th:value="${brand.mobile}" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input th:field="*{website}"  type="text" aria-required="true" required name="company_name"
+                                 placeholder="Brand Website" class="form-control" th:value="${brand.getWebsite()}"  >
+                    </div>
+                    <div class="form-group">
+                        <label for="address" class="col-form-label">Company Address:</label>
+                        <textarea th:field="*{address}"  minlength="10" maxlength="200" class="form-control" id="address"
+                          name="address" th:value="${brand.getAddress()}"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">About:</label>
+                        <textarea th:field="*{about}"  minlength="20" maxlength="500" class="form-control"
+                                  th:value="${brand.getAbout()}">
+                          </textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+<script th:src="@{/assets/script/main.js}" ></script>
+</body>
+
+</html>

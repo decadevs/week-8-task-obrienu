@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/assets/style/main.css}">
+    <title>Add Product</title>
+</head>
+
+<body>
+<header>
+    <nav class="navbar navbar-fixed navbar-expand-lg navbar-light bg-grey my-home-container">
+
+        <a class="nav-link" href="/"><img id="home-logo" th:src="@{./assets/images/logo.jpg}" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Product</a>
+                </li>
+                <li th:if="${session.user == null && session.brand == null}" class="nav-item">
+                    <a class="nav-link" href="/auth">Sign In</a>
+                </li>
+
+                <li th:if="${ session.brand != null}" class="nav-item">
+                    <a class="nav-link" th:href="@{'/brand/' + ${session.brand.getId()} + '/1'}"  >Dashboard</a>
+                </li>
+                <li th:if="${session.user != null}" class="nav-item" >
+                    <a class="nav-link" href="#">Welcome <span th:text="${session.user.getFirstName()}"></span></a>
+                </li>
+                <li th:if="${session.brand != null}" class="nav-item" >
+                    <a class="nav-link" href="#">Welcome <span th:text="${session.brand.getBrandName()}"></span></a>
+                </li>
+                <li th:if="${session.user != null || session.brand != null}" class="nav-item">
+                    <a class="nav-link" href="/logout">Sign Out</a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+    </header>
+    <main id="product" class="add-product">
+        <form th:object="${brand}" class="col-10 col-md-6 add-product-form" th:action="@{'/brand/edit/' + ${brand.getId()}}" method="POST"
+        role="tabpanel" aria-labelledby="nav-company-reg-tab" id="nav-company-reg">
+        <h3 class="text-center py-2">Edit Brand</h3>
+        <div class="form-group">
+            <input th:field="*{brandName}" th:value="*{brandName}" type="text" aria-required="true" required name="company_name"
+                placeholder="Company Name" class="form-control">
+        </div>
+        <div class="form-group">
+            <input th:field="*{website}" th:value="*{website}" type="text"  name="company_website"
+                placeholder="Website" class="form-control">
+        </div>
+        <div class="row">
+            <div class="form-group col-6">
+                <input th:field="*{email}" th:value="*{email}" required aria-required="true" name="email" type="email" placeholder="Email"
+                    class="form-control">
+            </div>
+            <div class="form-group col-6">
+                <input th:field="*{mobile}" th:value="*{mobile}" required aria-required="true" name="mobile" type="tel" placeholder="Mobile"
+                    class="form-control">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="address" class="col-form-label">Company Address:</label>
+            <textarea th:field="*{address}" th:value="*{address}" minlength="10" maxlength="500" class="form-control" id="address"
+                name="address"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="about" class="col-form-label">About Us:</label>
+            <textarea th:field="*{about}" th:value="*{about}" minlength="10" maxlength="500" class="form-control" id="about"
+                name="about"></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block">Edit Brand</button>
+    </form>
+
+   
+    </main>
+    <footer>
+        Pisces Mart
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
