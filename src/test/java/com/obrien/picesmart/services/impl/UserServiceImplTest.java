@@ -35,7 +35,7 @@ class UserServiceImplTest {
         userReceivingDTO.setEmail("obrien@hello.com");
         userReceivingDTO.setFirstName("Obrien");
         userReceivingDTO.setLastName("Longe");
-        userReceivingDTO.setMobile("07064201242");
+        userReceivingDTO.setMobile("0700000000");
         userReceivingDTO.setPassword("hello");
 
     }
@@ -43,8 +43,8 @@ class UserServiceImplTest {
     @Test
     void registerUser() {
      ServiceResponse response = userService.registerUser(userReceivingDTO);
-     List<User> users = userRepository.findAll();
-     assertEquals(1, users.size(), "Method should register one user");
+     List<User> users = userRepository.findByEmail(userReceivingDTO.getEmail());
+     assertEquals(1, users.size(), "Method should register user");
      assertTrue(response.isStatus());
     }
 
@@ -61,7 +61,7 @@ class UserServiceImplTest {
     @Test
     void userLoginWithMobile() {
         userService.registerUser(userReceivingDTO);
-        signInReceivingDTO = new SignInReceivingDTO("07064201242", "hello");
+        signInReceivingDTO = new SignInReceivingDTO("0700000000", "hello");
         ServiceResponse response = userService.userLogin(signInReceivingDTO);
         UserSendingDTO user = (UserSendingDTO) response.getData();
         assertTrue(response.isStatus(), "method should login user");

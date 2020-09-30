@@ -40,7 +40,7 @@ class BrandServiceImplTest {
     @Test
     void registerBrand() {
         brandService.registerBrand(brandReceivingDTO);
-        List<Brand> brands = brandRepository.findAll();
+        List<Brand> brands = brandRepository.findByEmail("decagon@decagon.hq");
         assertEquals(1, brands.size(), "Should return a brand after registration");
 
     }
